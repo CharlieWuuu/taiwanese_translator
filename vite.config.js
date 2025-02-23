@@ -3,27 +3,26 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-    base: '/taiwanese_translator/',
+    base: '/taiwanese_translator/', // ⚠️ 這裡一定要改成你的 GitHub Repository 名稱！
     plugins: [
         vue(),
         VitePWA({
-            registerType: 'autoUpdate',
             manifest: {
                 name: '台語翻譯器',
                 short_name: '台語翻譯',
-                description: '一個可以翻譯台語並發音的網站',
-                theme_color: '#007bff',
-                background_color: '#ffffff',
+                start_url: '/taiwanese_translator/', // ✅ 確保這裡指向 /你的倉庫名稱/
+                scope: '/taiwanese_translator/', // ✅ 確保這裡指向 /你的倉庫名稱/
                 display: 'standalone',
-                start_url: '/',
+                background_color: '#ffffff',
+                theme_color: '#007bff',
                 icons: [
                     {
-                        src: '/icons/icon-192x192.png',
+                        src: '/taiwanese_translator/icons/icon-192x192.png', // ✅ 這裡的路徑要加上 /你的倉庫名稱/
                         sizes: '192x192',
                         type: 'image/png',
                     },
                     {
-                        src: '/icons/icon-512x512.png',
+                        src: '/taiwanese_translator/icons/icon-512x512.png',
                         sizes: '512x512',
                         type: 'image/png',
                     },

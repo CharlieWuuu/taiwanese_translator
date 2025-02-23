@@ -5,7 +5,8 @@
 			<!-- 原文輸入框 + 清除按鈕 -->
 			<div class="input-group">
 				<textarea v-model="inputText" placeholder="輸入要翻譯的文字"></textarea>
-				<div class="button_container"> <button @click="translateText" :disabled="loading">
+				<div class="button_container">
+					<button @click="translateText" :disabled="loading">
 						{{ loading ? "翻譯中..." : "翻譯" }}
 					</button>
 					<button @click="clearInput">🗑 清除</button>
@@ -73,7 +74,6 @@ export default {
 					`http://tts001.iptcloud.net:8804/html_taigi_zh_tw?text0=${encodeURIComponent(this.inputText)}`
 				);
 				this.outputText = response.data || "翻譯失敗";
-
 				// 取得拼音
 				this.getPinyin(this.outputText);
 			} catch (error) {

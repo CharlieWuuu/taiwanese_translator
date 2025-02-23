@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 const isProduction = process.env.NODE_ENV === 'production';
 
 // 只有在 production 模式才設 `base`
-const base = isProduction ? '/' : '/';
+const base = isProduction ? '/taiwanese_translator/' : '/';
 
 export default defineConfig({
     base,

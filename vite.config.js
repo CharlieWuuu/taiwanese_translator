@@ -2,22 +2,29 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// 取得當前環境變數
+const isProduction = process.env.NODE_ENV === 'production';
+
+// 只有在 production 模式才設 `base`
+const base = isProduction ? '/taiwanese_translator/' : '/';
+
 export default defineConfig({
-    base: '/', // ⚠️ 這裡一定要改成你的 GitHub Repository 名稱！
+    base,
     plugins: [
         vue(),
         VitePWA({
+            registerType: 'autoUpdate',
             manifest: {
                 name: '台語翻譯器',
                 short_name: '台語翻譯',
-                start_url: '/taiwanese_translator/', // ✅ 確保這裡指向 /你的倉庫名稱/
-                scope: '/taiwanese_translator/', // ✅ 確保這裡指向 /你的倉庫名稱/
+                start_url: '/taiwanese_translator/', // ✅ 這裡仍然要設定正確的 start_url
+                scope: '/taiwanese_translator/',
                 display: 'standalone',
                 background_color: '#ffffff',
                 theme_color: '#007bff',
                 icons: [
                     {
-                        src: '/taiwanese_translator/icons/icon-192x192.png', // ✅ 這裡的路徑要加上 /你的倉庫名稱/
+                        src: '/taiwanese_translator/icons/icon-192x192.png',
                         sizes: '192x192',
                         type: 'image/png',
                     },

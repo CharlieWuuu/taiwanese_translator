@@ -2,8 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
-    base: import.meta.env.PROD ? '/taiwanese_translator/' : '/',
+export default defineConfig(({ mode }) => ({
+    base: mode === 'production' ? '/taiwanese_translator/' : '/',
     plugins: [
         vue(),
         VitePWA({
@@ -31,4 +31,4 @@ export default defineConfig({
             },
         }),
     ],
-});
+}));

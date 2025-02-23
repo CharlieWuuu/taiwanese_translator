@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<h1></h1>
+		<h1>翻譯器</h1>
 		<div class="translator">
 			<!-- 原文輸入框 + 清除按鈕 -->
 			<div class="input-group">

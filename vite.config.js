@@ -2,14 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// 取得當前環境變數
-const isProduction = process.env.NODE_ENV === 'production';
-
-// 只有在 production 模式才設 `base`
-const base = isProduction ? '/taiwanese_translator/' : '/';
-
 export default defineConfig({
-    base,
+    base: import.meta.env.PROD ? '/taiwanese_translator/' : '/',
     plugins: [
         vue(),
         VitePWA({

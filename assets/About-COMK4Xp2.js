@@ -1,0 +1,1 @@
+import{_ as o,c as t,o as n,a as r}from"./index-dDUqlyg-.js";const a={};function s(c,e){return n(),t("div",null,e[0]||(e[0]=[r("h1",null,"About Page",-1)]))}const u=o(a,[["render",s]]);export{u as default};

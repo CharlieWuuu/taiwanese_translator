@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+    base: '/taiwanese_translator/',
     plugins: [
         vue(),
         VitePWA({
@@ -25,28 +26,6 @@ export default defineConfig({
                         src: '/icons/icon-512x512.png',
                         sizes: '512x512',
                         type: 'image/png',
-                    },
-                ],
-            },
-            workbox: {
-                runtimeCaching: [
-                    {
-                        urlPattern: ({ request }) => request.destination === 'image',
-                        handler: 'CacheFirst',
-                        options: {
-                            cacheName: 'images-cache',
-                            expiration: {
-                                maxEntries: 50,
-                                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 天
-                            },
-                        },
-                    },
-                    {
-                        urlPattern: ({ request }) => request.destination === 'script' || request.destination === 'style',
-                        handler: 'StaleWhileRevalidate',
-                        options: {
-                            cacheName: 'static-resources',
-                        },
                     },
                 ],
             },

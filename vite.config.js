@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => ({
-    base: mode === 'production' ? '/taiwanese_translator/' : '/',
+    base: '/', // 🚀 這裡要設定你的 GitHub Repo 名稱！
     plugins: [
         vue(),
         VitePWA({

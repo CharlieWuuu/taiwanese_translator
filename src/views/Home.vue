@@ -17,27 +17,31 @@
 
 			<!-- 翻譯結果 + 編輯按鈕 -->
 			<div class="input-group">
-				<textarea :readonly="!isEditingOutput" v-model="outputText" placeholder="翻譯結果"></textarea>
+				<textarea class="TaiBun" :readonly="!isEditingOutput" v-model="outputText" placeholder="翻譯結果"></textarea>
 				<div class="button_container">
 					<!-- <button @click="toggleEdit('output')">
 						{{ isEditingOutput ? "🔒 鎖定" : "✏ 編輯" }}
 					</button> -->
-					<button @click="copyToClipboard(outputText)">📋 複製</button>
+					<!-- <button @click="copyToClipboard(outputText)">📋 複製</button> -->
+
 				</div>
 			</div>
 
 			<!-- 拼音結果 + 編輯按鈕 -->
 			<div class="input-group">
-				<textarea :readonly="!isEditingPinyin" v-model="pinyinText" placeholder="拼音結果"></textarea>
+				<textarea class="TaiLo" :readonly="!isEditingPinyin" v-model="pinyinText" placeholder="拼音結果"></textarea>
 				<div class="button_container">
-					<button @click="playAudio" :disabled="!outputText || loadingAudio">
-						{{ loadingAudio ? "生成語音中..." : "🔊 發音" }}
-					</button>
+
 					<!-- <button @click="toggleEdit('pinyin')">
 						{{ isEditingPinyin ? "🔒 鎖定" : "✏ 編輯" }}
 					</button> -->
-					<button @click="copyToClipboard(pinyinText)">📋 複製</button>
+					<button @click="playAudio(pinyinText)" :disabled="!outputText || loadingAudio">
+						{{ loadingAudio ? "生成語音中..." : "🔊 發音" }}
+					</button>
+					<button @click="copyToClipboard(outputText)">📋 複製台文</button>
+					<button @click="copyToClipboard(pinyinText)">📋 複製台羅</button>
 				</div>
+
 			</div>
 
 
@@ -70,10 +74,12 @@ export default {
 
 			try {
 				// 取得翻譯結果
-				const response = await axios.get(
-					`http://tts001.iptcloud.net:8804/html_taigi_zh_tw?text0=${encodeURIComponent(this.inputText)}`
+				const response = await axios.post(
+					'https://taiwanese-translator-api.onrender.com/TranslateText',
+					{ text: this.inputText }
 				);
-				this.outputText = response.data || "翻譯失敗";
+				console.log(response.data);
+				this.outputText = response.data.result || "翻譯失敗";
 				// 取得拼音
 				this.getPinyin(this.outputText);
 			} catch (error) {
@@ -87,10 +93,11 @@ export default {
 			if (!text.trim()) return;
 
 			try {
-				const response = await axios.get(
-					`http://tts001.iptcloud.net:8804/html_taigi_tw_py?text0=${encodeURIComponent(text)}`
+				const response = await axios.post(
+					'https://taiwanese-translator-api.onrender.com/GetPinyin',
+					{ text: text }
 				);
-				this.pinyinText = response.data || "拼音取得失敗";
+				this.pinyinText = response.data.result || "拼音取得失敗";
 			} catch (error) {
 				console.error("拼音 API 錯誤:", error);
 				this.pinyinText = "拼音取得錯誤";
@@ -101,11 +108,22 @@ export default {
 			this.loadingAudio = true;
 
 			try {
-				const audioUrl = `http://tts001.iptcloud.net:8804/synthesize_TLPA?text1=${encodeURIComponent(this.outputText)}&gender=%E5%A5%B3%E8%81%B2&accent=%E5%BC%B7%E5%8B%A2%E8%85%94%EF%BC%88%E9%AB%98%E9%9B%84%E8%85%94%EF%BC%89`;
+				console.log(this.pinyinText);
+				// 取得音訊檔案
+				const response = await axios.post(
+					'https://taiwanese-translator-api.onrender.com/GetAudio',
+					{ text: this.pinyinText },
+					{ responseType: 'blob' } // 重要！讓 axios 取得二進位音檔
+				);
 
+				// 轉換成 Blob URL
+				const audioBlob = new Blob([response.data], { type: "audio/mpeg" });
+				const audioUrl = URL.createObjectURL(audioBlob);
+
+				// 播放音訊
 				if (this.audio) {
 					this.audio.pause();
-					this.audio = null;
+					URL.revokeObjectURL(this.audio.src); // 釋放舊的 URL
 				}
 
 				this.audio = new Audio(audioUrl);
@@ -165,9 +183,21 @@ export default {
 				transition: background 0.3s;
 
 				&:read-only {
-					background: #f0f0f0;
+					background: transparent;
 					cursor: not-allowed;
 					border: none;
+					resize: none;
+					height: fit-content;
+					padding: 0;
+					color: #0056b3;
+
+					&.TaiBun {
+						font-size: 28px;
+					}
+
+					&.TaiLo {
+						line-height: 2;
+					}
 				}
 			}
 

@@ -159,7 +159,6 @@ export default {
 <style lang="scss" scoped>
 .container {
 	text-align: center;
-	padding: 20px;
 
 	.translator {
 		display: flex;
@@ -173,6 +172,11 @@ export default {
 			align-items: center;
 			gap: 5px;
 			width: 80%;
+
+			@media screen and (max-width: 600px) {
+				width: 100%;
+
+			}
 
 			textarea {
 				flex-grow: 1;
